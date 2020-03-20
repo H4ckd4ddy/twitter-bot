@@ -17,15 +17,19 @@ class stream_listener(tweepy.StreamListener):
 
     def on_status(self, tweet):
 
+        # Skip if username contain keyword
         if any(trigger in tweet.user.screen_name.lower() for trigger in TRIGGERS) or any(word in tweet.user.screen_name.lower() for word in BLACKLIST):
             return
 
+        # Skip if trigger not in tweet
         if not any(trigger in tweet.text.lower() for trigger in TRIGGERS):
             return
 
+        # Skip if tweet contain blacklisted word
         if any(word in tweet.text.lower() for word in BLACKLIST):
             return
 
+        # Skip if retweet
         if tweet.retweeted or 'RT @' in tweet.text:
             return
         
